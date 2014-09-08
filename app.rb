@@ -16,10 +16,10 @@ end
 
 get '/rss' do
   rss = RSS::Maker.make('2.0') do |maker|
-    maker.channel.about = 'http://www.city.isehara.kanagawa.jp'
-    maker.channel.title = '伊勢原市公式HPの更新履歴'
-    maker.channel.description = '伊勢原市公式HPの更新履歴をrssにしたもの'
-    maker.channel.link = TARGET_URL
+    maker.channel.about = 'http://rss-of-the-city-hall.herokuapp.com/'
+    maker.channel.title = '市役所公式HPの更新履歴'
+    maker.channel.description = '市役所公式HPの更新履歴をRSSにしたもの'
+    maker.channel.link = 'http://rss-of-the-city-hall.herokuapp.com/'
 
     ary_of_hash_for_rss(get_resource_node).each do |h|
       item = maker.items.new_item
