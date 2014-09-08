@@ -1,0 +1,7 @@
+<% nodes.each do |node| %>
+  <li>
+    <a href = '<%= node[:link] %>' target = 'new'>
+      <%= node[:title] %>
+    </a>
+  </li>
+<% end %>
