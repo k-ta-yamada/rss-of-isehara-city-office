@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title 更新履歴
+  body
+    h1 更新履歴
+
+    hr
+
+    - nodes.each do |node|
+      h2.title
+        - unless node[:link].nil?
+          a.link href = node[:link] target = 'new' = node[:title]
+        - else
+          = node[:title]
+      - unless node[:description].nil?
+        p.description = node[:description]
+
+    hr
+
+    a href = 'https://github.com/k-ta-yamada/rss_of_the_city_hall_website' github
