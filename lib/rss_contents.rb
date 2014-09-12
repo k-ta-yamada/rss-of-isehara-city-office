@@ -54,7 +54,7 @@ class RssContents
     # @return [Array]
     def contents_of_update_history_page
       doc = Nokogiri::HTML(open(TARGET_URL))
-      doc.css('.contentsArea li')[0..1]
+      doc.css('.contentsArea li')
     end
 
     # 詳細ページのURLを生成する
