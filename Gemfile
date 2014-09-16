@@ -1,7 +1,6 @@
 # A sample Gemfile
 source 'https://rubygems.org'
-
-# gem "rails"
+ruby '2.1.2'
 
 gem 'sinatra'
 gem 'slim'

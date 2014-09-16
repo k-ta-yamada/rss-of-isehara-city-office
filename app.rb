@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/json'
 require 'slim'
 require './lib/rss_contents'
 
@@ -34,4 +35,8 @@ get '/rss' do
   end
 
   rss.to_s
+end
+
+get '/rss.json' do
+  json(rss: RssContents.data_for_rss)
 end
