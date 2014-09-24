@@ -14,7 +14,7 @@ end
 
 get '/' do
   slim :index,
-       locals: { nodes: RssContents.data_for_rss,
+       locals: { nodes: RssContents.result_cache,
                  last_update: RssContents.last_update }
 end
 
@@ -25,7 +25,7 @@ get '/rss' do
     maker.channel.link        = THIS_SITE
     maker.channel.description = '市役所公式HPの更新履歴をRSSにしたもの'
 
-    RssContents.data_for_rss.each do |h|
+    RssContents.result_cache.each do |h|
       next if h[:link].nil?
       item = maker.items.new_item
       item.title       = h[:title]
@@ -38,5 +38,10 @@ get '/rss' do
 end
 
 get '/rss.json' do
-  json(rss: RssContents.data_for_rss)
+  json(rss: RssContents.result_cache)
+end
+
+get '/rss_reloading' do
+  RssContents.reloading_contents
+  "reloaded contents at #{RssContents.last_update}"
 end

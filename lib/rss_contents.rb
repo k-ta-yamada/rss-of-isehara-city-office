@@ -8,7 +8,7 @@ class RssContents
   # 情報取得元のパス
   TARGET_PATH = '/topics.htm'
   # 指定秒数以下かのチェックで使用する秒数を指定
-  SPECIFIED_TIME = 600
+  SPECIFIED_TIME = 3600
 
   @result_cache = []
   @last_update = Time.now
@@ -16,7 +16,10 @@ class RssContents
   class << self
     # 取得情報をHashのArrayで返す
     # @return [Array-of-Hash]
-    def data_for_rss
+    # @note 指定時間が経過していれば情報取得元をつついてしまうので、
+    #       表示の際には.result_cacheを使用するようにする。
+    # @note 別途cronなどで/rss_reloadingにアクセスすることでキャッシュしておくこと。
+    def reloading_contents
       # 毎回TARGET_HOSTを突かないようにするため
       return @result_cache if use_result_of_previous?
 
@@ -28,6 +31,16 @@ class RssContents
         @result_cache << { title: title, link: link, description: description }
       end
       @last_update = Time.now
+      @result_cache
+    end
+
+    # クラスインスタンス変数の@result_cacheを返す
+    # @result_cacheがnilの場合はreloading_contentsを実行
+    # @return [Array-of-Hash]
+    # @note rubocopでattr_readerへの変更を警告されるが
+    #       クラスインスタンス変数を使用したいためにわざとやってる
+    def result_cache   # rubocop:disable Style/TrivialAccessors
+      reloading_contents if @result_cache.empty?
       @result_cache
     end
 
@@ -62,7 +75,7 @@ class RssContents
     def contents_of_detail_page(link)
       return nil if link.nil?
       doc = Nokogiri::HTML(open(link))
-      doc.css('.skip ~ *').map { |elm| elm.text }.join("\n")
+      doc.css('.skip ~ *').map(&:text).join("\n")
     end
 
     # 前回処理時間から指定時間以下かつ、@result_cacheが空でない場合はtrue
