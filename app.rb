@@ -12,6 +12,10 @@ if development?
   require 'byebug'
 end
 
+configure :production do
+  require 'newrelic_rpm'
+end
+
 get '/' do
   slim :index,
        locals: { nodes: RssContents.result_cache,
