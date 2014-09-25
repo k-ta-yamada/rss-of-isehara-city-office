@@ -5,6 +5,7 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'slim'
 gem 'nokogiri'
+gem 'newrelic_rpm'
 
 group :development do
   gem 'pry'
