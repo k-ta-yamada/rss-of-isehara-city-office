@@ -12,7 +12,7 @@ end
 require './lib/rss_contents'
 
 # このサイト
-THIS_SITE = 'http://rss-of-the-city-hall.herokuapp.com'
+THIS_SITE = 'http://rss-of-isehara-city-office.herokuapp.com'
 
 get '/' do
   slim :index,
@@ -23,9 +23,9 @@ end
 get '/rss' do
   rss = RSS::Maker.make('2.0') do |maker|
     maker.channel.about       = "#{THIS_SITE}/rss"
-    maker.channel.title       = '市役所公式HPの更新履歴'
+    maker.channel.title       = '伊勢原市役所公式HPの更新履歴'
     maker.channel.link        = THIS_SITE
-    maker.channel.description = '市役所公式HPの更新履歴をRSSにしたもの'
+    maker.channel.description = '伊勢原市役所公式HPの更新履歴をRSSにしたもの'
 
     RssContents.result_cache.each do |h|
       next if h[:link].nil?
@@ -47,3 +47,6 @@ get '/rss_reloading' do
   RssContents.reloading_contents
   "reloaded contents at #{RssContents.last_update}"
 end
+
+# herokuの初回アクセスでタイムアウト？になるのでapp起動時に一度読み込んじゃう
+RssContents.reloading_contents
