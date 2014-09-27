@@ -1,22 +1,10 @@
-doctype html
-html
-  head
-    title 市役所公式ホームページの更新履歴
-  body
-    h1 市役所公式ホームページの更新履歴
-    p = "最終取得 #{last_update} / Now #{Time.now}"
-
-    hr
-
-    - nodes.each do |node|
-      h2.title
-        - unless node[:link].nil?
-          a.link href = node[:link] target = 'new' = node[:title]
-        - else
+div.container
+  - nodes.each do |node|
+    h3
+      - unless node[:link].nil?
+        a href=node[:link] target='new'
           = node[:title]
-      - unless node[:description].nil?
-        p.description = node[:description]
-
-    hr
-
-    a href = 'https://github.com/k-ta-yamada/rss_of_the_city_hall_website' github
+      - else
+        = node[:title]
+    - unless node[:description].nil?
+      p == node[:description]

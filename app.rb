@@ -1,20 +1,18 @@
 require 'sinatra'
 require 'sinatra/json'
 require 'slim'
-require './lib/rss_contents'
-
-# このサイト
-THIS_SITE = 'http://rss-of-the-city-hall.herokuapp.com'
-
 if development?
   require 'sinatra/reloader'
   require 'pry'
   require 'byebug'
 end
-
 configure :production do
   require 'newrelic_rpm'
 end
+require './lib/rss_contents'
+
+# このサイト
+THIS_SITE = 'http://rss-of-the-city-hall.herokuapp.com'
 
 get '/' do
   slim :index,

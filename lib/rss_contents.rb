@@ -75,7 +75,7 @@ class RssContents
     def contents_of_detail_page(link)
       return nil if link.nil?
       doc = Nokogiri::HTML(open(link))
-      doc.css('.skip ~ *').map(&:text).join("\n")
+      doc.css('.skip ~ *').map { |v| "<p>#{v.text}</p>" }.join
     end
 
     # 前回処理時間から指定時間以下かつ、@result_cacheが空でない場合はtrue

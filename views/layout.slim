@@ -1,0 +1,44 @@
+doctype html
+html
+  head
+    title 市役所公式ホームページの更新履歴
+    <!-- Latest compiled and minified CSS -->
+    link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+    <!-- Optional theme -->
+    link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+    <!-- Latest compiled and minified JavaScript -->
+    script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
+
+    link rel="stylesheet" href="css/layout.css"
+
+  body
+
+    /navigation
+    == slim :_nav
+
+    /header
+    div.page-header.text-center
+      h1 伊勢原市市役所公式ホームページの更新履歴
+      p
+        a href=RssContents::TARGET_HOST target='new'
+          | 神奈川県伊勢原市の市役所ホームページ
+          | &nbsp;
+          span.glyphicon.glyphicon-new-window
+        | の更新履歴ページを
+        br
+        | スクレイピングしてRSS化を試みたものです。
+        br
+        = "最終取得 #{last_update}"
+
+    /content
+    == yield
+
+    /footer
+    footer.text-center
+      p
+        a href = 'https://github.com/k-ta-yamada/rss-of-the-city-hall' target='new'
+          | Copyright &copy; 2014 k-ta-yamada@github
+          | &nbsp;
+          span.glyphicon.glyphicon-new-window
+
+
