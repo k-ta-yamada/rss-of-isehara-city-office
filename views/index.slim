@@ -2,7 +2,7 @@ div.container
   - nodes.each do |node|
     h3
       - unless node[:link].nil?
-        a href=node[:link] target='new'
+        a href=node[:link] target='_blank'
           = node[:title]
       - else
         = node[:title]
