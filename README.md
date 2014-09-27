@@ -13,4 +13,4 @@
 
 
 # サンプル
-[http://rss-of-isehara-city-office.herokuapp.com]()
+[http://rss-of-isehara-city-office.herokuapp.com](http://rss-of-isehara-city-office.herokuapp.com)
