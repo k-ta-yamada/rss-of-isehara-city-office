@@ -24,14 +24,19 @@ class RssContents
       return @result_cache if use_result_of_previous?
 
       @result_cache = []
-      contents_of_update_history_page.each do |list_item|
-        title       = list_item.text
-        link        = link_to_detail_page(list_item)
-        description = contents_of_detail_page(link)
-        @result_cache << { title: title, link: link, description: description }
+      contents_of_update_history_page.each_with_index do |h, ind|
+        h[1].each_with_index do |list_item, order|
+          title       = list_item.text
+          link        = link_to_detail_page(list_item)
+          description = (ind < 1) ? contents_of_detail_page(link) : nil
+          @result_cache << { title:       title,
+                             link:        link,
+                             description: description,
+                             date:        h[0],
+                             order:       order }
+        end
       end
       @last_update = Time.now
-      @result_cache
     end
 
     # クラスインスタンス変数の@result_cacheを返す
@@ -54,11 +59,31 @@ class RssContents
 
     private
 
-    # 更新履歴ページから一覧を取得する
-    # @return [Array]
+    # 更新履歴ページから一覧を取得し、
+    # 日付文字列をkey、liタグのArrayをvalueとするHashを返す
+    # @return [Hash]
+    # @example
+    #   { '2014/09/26' => [Nokogiri::XML::Element, ..],
+    #     '2014/09/20' => [Nokogiri::XML::Element, ..],
+    #     '2014/09/16' => [Nokogiri::XML::Element, ..] }
     def contents_of_update_history_page
       doc = Nokogiri::HTML(open("#{TARGET_HOST}#{TARGET_PATH}"))
-      doc.css('.contentsArea li')
+      result, temp_date_string = {}, nil
+
+      doc.css('.contentsArea h1 ~ *').each do |element|
+        if element.name == 'p' && /\d{1,2}.\d{1,2}./.match(element.text)
+          temp_date_string = build_date_string(element.text)
+        elsif element.name == 'ul'
+          result[temp_date_string] = element.css('li')
+        end
+      end
+      result
+    end
+
+    def build_date_string(s)
+      match_data = /(\d{1,2})月(\d{1,2})日/.match(s)
+      mm, dd = *match_data[1..2]
+      Time.new(Time.new.year, mm, dd).strftime('%Y-%m-%d')
     end
 
     # 渡されたNokogiri::XML::Elementからアンカータグを検索し

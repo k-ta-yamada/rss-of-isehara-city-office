@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title 市役所公式ホームページの更新履歴
+    title 伊勢原市市役所公式ホームページの更新履歴
     <!-- Latest compiled and minified CSS -->
     link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
     <!-- Optional theme -->
@@ -28,7 +28,7 @@ html
         br
         | スクレイピングしてRSS化を試みたものです。
         br
-        = "最終取得 #{last_update}"
+        = "最終取得 : #{RssContents.last_update} / #{RssContents.result_cache.size}件"
 
     /content
     == yield

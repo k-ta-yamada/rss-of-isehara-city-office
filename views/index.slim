@@ -1,10 +1,18 @@
 div.container
-  - nodes.each do |node|
+  - RssContents.result_cache.each do |node|
     h3
       - unless node[:link].nil?
+        small
+          = node[:date]
+          | &nbsp;
+          = node[:order]
         a href=node[:link] target='_blank'
           = node[:title]
       - else
+        small
+          = node[:date]
+          | &nbsp;
+          = node[:order]
         = node[:title]
     - unless node[:description].nil?
       p == node[:description]
