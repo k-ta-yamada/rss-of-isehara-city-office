@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/json'
+require 'rss'
 require 'slim'
 if development?
   require 'sinatra/reloader'
@@ -40,7 +41,7 @@ get '/rss' do
 end
 
 get '/rss.json' do
-  json(rss: RssContents.result_cache)
+  json(rss: RssContents.result_cache.map(&:to_hash))
 end
 
 get '/rss_reloading' do

@@ -1,7 +1,6 @@
 class RssContents
   require 'open-uri'
   require 'nokogiri'
-  require 'rss'
 
   # 情報取得元のホスト名
   TARGET_HOST = 'http://www.city.isehara.kanagawa.jp'
@@ -33,11 +32,9 @@ class RssContents
     end
 
     # クラスインスタンス変数の@result_cacheを返す
-    # @result_cacheがnilの場合はreloading_contentsを実行
-    # @return [Array-of-Hash]
-    # @note rubocopでattr_readerへの変更を警告されるが
-    #       クラスインスタンス変数を使用したいためにわざとやってる
-    def result_cache   # rubocop:disable Style/TrivialAccessors
+    # @result_cacheがempty?の場合はreloading_contentsを実行
+    # @return [Array] #<RssContents>
+    def result_cache
       rebuild_contents if @result_cache.empty?
       @result_cache
     end
@@ -95,6 +92,14 @@ class RssContents
     @description = description_data(order)
     @date        = date
     @order       = order
+  end
+
+  def to_hash
+    { title:       @title,
+      link:        @link,
+      description: @description,
+      date:        @date,
+      order:       @order }
   end
 
   private
