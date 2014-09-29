@@ -27,12 +27,12 @@ get '/rss' do
     maker.channel.link        = THIS_SITE
     maker.channel.description = '伊勢原市役所公式HPの更新履歴をRSSにしたもの'
 
-    RssContents.result_cache.each do |h|
-      next if h[:link].nil?
+    RssContents.result_cache.each do |content|
+      next if content.link.nil?
       item = maker.items.new_item
-      item.title       = h[:title]
-      item.link        = h[:link]
-      item.description = h[:description]
+      item.title       = content.title
+      item.link        = content.link
+      item.description = content.description
     end
   end
 
@@ -44,9 +44,6 @@ get '/rss.json' do
 end
 
 get '/rss_reloading' do
-  RssContents.reloading_contents
+  RssContents.rebuild_contents
   "reloaded contents at #{RssContents.last_update}"
 end
-
-# herokuの初回アクセスでタイムアウト？になるのでapp起動時に一度読み込んじゃう
-RssContents.reloading_contents
