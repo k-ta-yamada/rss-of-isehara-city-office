@@ -106,22 +106,26 @@ class RssContents
 
   # 渡されたNokogiri::XML::Elementからアンカータグを検索し
   # href属性から詳細ページへのリンクを生成する。
-  # @return [String, Nil] アンカータグがない場合はnil
+  # @return [String, Nil] アンカータグがない、hrefがない場合はnil
   def link_to_detail(element)
+    # TODO: 2つ以上の要素がある場合に未対応
     a_tag = element.css('a').first
-    a_tag.nil? ? nil : "#{TARGET_HOST}#{a_tag['href']}"
+    return nil if a_tag.nil? || a_tag['href'].nil?
+
+    uri = URI(a_tag['href'])
+    uri.host.nil? ? "#{TARGET_HOST}#{uri.path}" : uri.to_s
   end
 
   def description_data(order)
-    order < NUMBER_OF_DETAIL ? detail_content(@link) : nil
+    order < NUMBER_OF_DETAIL ? detail_content : nil
   end
 
   # 更新履歴のリンク情報から詳細ページの情報を取得する
   # @param [String] link 詳細ページのURL
   # @return [String, Nil] linkがnilの場合はnil
-  def detail_content(link)
-    return nil if link.nil?
-    doc = Nokogiri::HTML(open(link))
+  def detail_content
+    return nil if @link.nil?
+    doc = Nokogiri::HTML(open(@link))
     doc.css('.skip ~ *').map { |v| "<p>#{v.text}</p>" }.join
   end
 end
